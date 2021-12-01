@@ -1,20 +1,24 @@
 #include <iostream>
 #include <thread>
+//#include <mutex>
 using namespace std;
 
-void stampa(int dato){
-    cout << dato;
-}
-
-void stampa2(){
-    cout << "Nulla";
-}
+class Test{
+    private: 
+        int dato;
+    public: 
+        void stampa(int v){
+            cout << v << " " << dato << endl;
+        }
+        void operator () (int v){
+            cout << "[" << v << "]" << endl;
+        }
+};
 
 int main() {
-    thread stampaThread(stampa, 5);
-    thread stampaNulla(stampa2);
-    cout << "Ciao";
-    stampaNulla.join();
-    stampaThread.join();
-    cout << "Fine";
+    Test miotest;
+    thread tc(Test::stampa, &miotest, 5);
+    thread tpar(miotest, 9);
+    tc.join();
+    tpar.join();
 } 
